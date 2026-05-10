@@ -1,0 +1,1168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Minimal Hero</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
+    />
+    <style>
+      *,
+      *::before,
+      *::after {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        /* border: 1px solid red; */
+      }
+
+      html {
+        width: 100%;
+        overflow: hidden;
+      }
+
+      body {
+        width: 100%;
+        overflow-x: hidden;
+      }
+
+      /* ── Hero ──────────────────────────────────────────── */
+      .hero {
+        width: 100%;
+        height: 130vh;
+        background: linear-gradient(
+          172deg,
+          #a9d8f2 0%,
+          #bfe4f8 14%,
+          #d4eef9 30%,
+          #e8f5fb 48%,
+          #f2f5f0 64%,
+          #e4d4ad96 80%,
+          #ffdfa398 100%
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow-x: clip;
+        z-index: 1;
+      }
+
+      /* ── Ambient background clouds ─────────────────────── */
+      .bg-cloud {
+        position: absolute;
+        opacity: 0.9;
+      }
+
+      .bg-cloud-1 {
+        width: 30%;
+        top: 6%;
+        left: -6%;
+      }
+
+      .bg-cloud-2 {
+        width: 26%;
+        bottom: 8%;
+        right: -4%;
+      }
+
+      .bg-cloud-3 {
+        width: 52%;
+        bottom: -14%;
+        left: -2%;
+        opacity: 0.9;
+      }
+
+      .bg-cloud-4 {
+        width: 34%;
+        bottom: 0%;
+        right: 14%;
+        opacity: 0.9;
+      }
+
+      .bg-cloud-5 {
+        width: 22%;
+        bottom: 6%;
+        right: -2%;
+        opacity: 0.9;
+      }
+
+      /* ── Bird flock ─────────────────────────────────────────── */
+      .left-wing {
+        animation: flap-left var(--bflap, 0.5s) infinite alternate ease-in-out;
+        transform-origin: 150px 140px;
+      }
+      .right-wing {
+        animation: flap-right var(--bflap, 0.5s) infinite alternate ease-in-out;
+        transform-origin: 150px 140px;
+      }
+      @keyframes flap-left {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(-40deg);
+        }
+      }
+      @keyframes flap-right {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(40deg);
+        }
+      }
+
+      .bird {
+        position: absolute;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: 2;
+        width: var(--bsize, 75px);
+        height: var(--bsize, 75px);
+        opacity: 0;
+        animation: bird-fly var(--bdur, 16s) linear var(--bdelay, 0s) infinite;
+        animation-timing-function: var(--beasing, ease-in-out);
+      }
+
+      .bird svg {
+        transform: rotate(50deg);
+        transform-origin: center center;
+      }
+
+      @keyframes bird-fly {
+        0% {
+          transform: translate(
+            calc(-15vw + var(--bx, 0px)),
+            calc(93vh + var(--by, 0px))
+          );
+          opacity: 0;
+        }
+        6% {
+          opacity: 0.88;
+        }
+        50% {
+          transform: translate(
+            calc(47vw + var(--bx, 0px)),
+            calc(37vh + var(--by, 0px))
+          );
+        }
+        94% {
+          opacity: 0.88;
+        }
+        100% {
+          transform: translate(
+            calc(115vw + var(--bx, 0px)),
+            calc(-38vh + var(--by, 0px))
+          );
+          opacity: 0;
+        }
+      }
+
+      /* ── Fixed cloud overlay (above all sections) ──────── */
+
+      /* ── Nav scene ─────────────────────────────────────── */
+      .nav-scene {
+        position: relative;
+        width: 100%;
+        height: 210px;
+        display: flex;
+        align-items: center;
+        z-index: 2;
+      }
+
+      /* Scrollable track — mask fades text before clouds begin */
+      .nav-track {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        cursor: grab;
+        user-select: none;
+        -webkit-mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          black 26%,
+          black 74%,
+          transparent 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          transparent 0%,
+          black 26%,
+          black 74%,
+          transparent 100%
+        );
+      }
+
+      .nav-track::-webkit-scrollbar {
+        display: none;
+      }
+      .nav-track.dragging {
+        cursor: grabbing;
+      }
+
+      /* Nav list */
+      .nav-list {
+        display: flex;
+        flex: none;
+        list-style: none;
+        gap: 58px;
+        align-items: center;
+        /* half-gap on each side so copies abut seamlessly */
+        padding: 20px 29px;
+        white-space: nowrap;
+      }
+
+      .nav-list a {
+        text-decoration: none;
+        font-family: "Raleway", sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 0.26em;
+        color: #5c7e96;
+        text-transform: uppercase;
+        font-weight: 400;
+        transition:
+          color 0.3s ease,
+          transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+        display: inline-block;
+        transform: scale(1);
+        transform-origin: center center;
+      }
+
+      .nav-list a:hover {
+        color: #1a4560;
+      }
+
+      .nav-list a.center-item {
+        transform: scale(2);
+        color: #0e2f45;
+        font-weight: 700;
+        letter-spacing: 0.3em;
+      }
+
+      /* ── Cloud edge masks ───────────────────────────────── */
+      .cloud-mask {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40%;
+        z-index: 20;
+        pointer-events: none;
+        overflow-x: hidden;
+      }
+
+      .cloud-mask img {
+        width: 100%;
+        height: auto;
+        display: block;
+        /* mix-blend-mode: multiply; */
+      }
+
+      .cloud-mask-left {
+        left: -3%;
+      }
+
+      .cloud-mask-right {
+        right: -3%;
+        transform: translateY(-50%) scaleX(-1);
+      }
+
+      .scycrapers-wrapper {
+        position: relative;
+        overflow-x: clip;
+      }
+
+      /* ── Top clouds on scycrapers (bleed upward into hero) ── */
+      .top-cloud {
+        position: absolute;
+        pointer-events: none;
+        z-index: 2;
+      }
+
+      .top-cloud-1 {
+        width: 55%;
+        top: -18%;
+        left: -4%;
+        opacity: 1;
+      }
+
+      .top-cloud-2 {
+        width: 42%;
+        top: -14%;
+        right: -2%;
+        opacity: 1;
+      }
+
+      .top-cloud-3 {
+        width: 30%;
+        top: -8%;
+        left: 30%;
+        opacity: 1;
+      }
+
+      .scycrapers {
+        height: 100vh;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: "Raleway", sans-serif;
+        font-size: 2.5rem;
+        color: #1a4560;
+        background-image: url("images/scycrapers/scycrap04.jpg");
+        background-size: cover;
+        background-position: center;
+        will-change: transform, opacity;
+      }
+
+      /* ── Swiper cube section ────────────────────────────── */
+      #mainSwiper,
+      #page-sections {
+        font-family:
+          Helvetica Neue,
+          Helvetica,
+          Arial,
+          sans-serif;
+        color: #fff;
+      }
+
+      .swiper {
+        width: 100vw;
+        height: 100vh;
+      }
+
+      .swiper-slide {
+        height: 100vh;
+        display: flex;
+        background-size: cover;
+        background-position: center;
+      }
+
+      .slide-hero {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        text-align: center;
+        position: relative;
+      }
+
+      .slide-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.52);
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 720px;
+        padding: 2rem;
+      }
+
+      .hero-content h1 {
+        font-size: clamp(2.8rem, 6vw, 5.5rem);
+        font-weight: 800;
+        line-height: 1.08;
+        letter-spacing: -1.5px;
+        margin: 0 0 1.2rem;
+      }
+
+      .hero-content p {
+        font-size: clamp(1rem, 1.8vw, 1.3rem);
+        opacity: 0.82;
+        line-height: 1.65;
+        margin: 0 0 2.2rem;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 0.85rem 2.4rem;
+        background: #fff;
+        color: #111;
+        border-radius: 999px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        text-decoration: none;
+        letter-spacing: 0.4px;
+        transition: opacity 0.2s;
+      }
+
+      .btn:hover {
+        opacity: 0.82;
+      }
+
+      .slide-content {
+        align-items: center;
+        justify-content: center;
+      }
+
+      .content-inner {
+        max-width: 1060px;
+        width: 100%;
+        padding: 3.5rem 2.5rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+      }
+
+      .text-block h2 {
+        font-size: clamp(1.8rem, 3.2vw, 2.8rem);
+        font-weight: 700;
+        line-height: 1.15;
+        margin: 0 0 1rem;
+      }
+
+      .text-block p {
+        font-size: clamp(0.9rem, 1.4vw, 1.05rem);
+        opacity: 0.78;
+        line-height: 1.75;
+        margin: 0 0 0.9rem;
+      }
+
+      .image-block img {
+        width: 100%;
+        border-radius: 14px;
+        display: block;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+      }
+
+      .scroll-hint {
+        position: fixed;
+        bottom: 1.8rem;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        opacity: 0.45;
+        pointer-events: none;
+        transition: opacity 0.6s;
+        z-index: 100;
+        color: #fff;
+        font-family:
+          Helvetica Neue,
+          Helvetica,
+          Arial,
+          sans-serif;
+      }
+
+      .scroll-hint.hidden {
+        opacity: 0;
+      }
+
+      #page-sections {
+        position: relative;
+      }
+
+      .page-section {
+        padding: 7rem 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .section-features {
+        background: #111827;
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .section-features h2 {
+        font-size: clamp(1.9rem, 3vw, 2.8rem);
+        font-weight: 700;
+        margin: 0 0 0.75rem;
+      }
+
+      .section-features .lead {
+        font-size: 1.05rem;
+        opacity: 0.6;
+        max-width: 560px;
+        margin: 0 auto 3.5rem;
+        line-height: 1.7;
+      }
+
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        max-width: 1100px;
+        width: 100%;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 2.2rem 2rem;
+        text-align: left;
+      }
+
+      .card-icon {
+        font-size: 2rem;
+        margin-bottom: 1.1rem;
+      }
+
+      .card h3 {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin: 0 0 0.6rem;
+      }
+
+      .card p {
+        font-size: 0.9rem;
+        opacity: 0.62;
+        line-height: 1.75;
+        margin: 0;
+      }
+
+      .section-cta {
+        background: #0f172a;
+        flex-direction: column;
+        text-align: center;
+        min-height: 50vh;
+      }
+
+      .section-cta h2 {
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        font-weight: 800;
+        margin: 0 0 1rem;
+        letter-spacing: -1px;
+      }
+
+      .section-cta p {
+        font-size: 1.05rem;
+        opacity: 0.62;
+        max-width: 520px;
+        margin: 0 auto 2.4rem;
+        line-height: 1.7;
+      }
+
+      .btn-outline {
+        display: inline-block;
+        padding: 0.85rem 2.4rem;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        color: #fff;
+        border-radius: 999px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        text-decoration: none;
+        margin-left: 0.75rem;
+        transition: border-color 0.2s;
+      }
+
+      .btn-outline:hover {
+        border-color: #fff;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="hero">
+      <!-- Ambient background clouds -->
+      <img class="bg-cloud bg-cloud-1" src="images/clouds/cloud02.png" alt="" />
+      <img class="bg-cloud bg-cloud-2" src="images/clouds/cloud03.png" alt="" />
+      <!-- Bottom clouds (overflow onto next section intentionally) -->
+      <img class="bg-cloud bg-cloud-3" src="images/clouds/cloud02.png" alt="" />
+      <img class="bg-cloud bg-cloud-4" src="images/clouds/cloud03.png" alt="" />
+      <img class="bg-cloud bg-cloud-5" src="images/clouds/cloud02.png" alt="" />
+
+      <!-- Bird Flock -->
+      <div id="bird-flock"></div>
+
+      <!-- Navigation -->
+      <div class="nav-scene">
+        <div class="nav-track" id="navTrack">
+          <ul class="nav-list">
+            <li><a href="#" class="active">Home</a></li>
+            <li><a href="#">Profile</a></li>
+            <li><a href="#">Works</a></li>
+            <li><a href="#">History</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">Team</a></li>
+            <li><a href="#">Journal</a></li>
+            <li><a href="#">Archive</a></li>
+          </ul>
+        </div>
+
+        <!-- Cloud edge masks -->
+        <div class="cloud-mask cloud-mask-left">
+          <img src="images/clouds/cloud03.png" alt="" />
+        </div>
+        <div class="cloud-mask cloud-mask-right">
+          <img src="images/clouds/cloud04.png" alt="" />
+        </div>
+      </div>
+    </section>
+
+    <div class="scycrapers-wrapper">
+      <img
+        class="top-cloud top-cloud-1"
+        src="images/clouds/cloud03.png"
+        alt=""
+      />
+      <img
+        class="top-cloud top-cloud-2"
+        src="images/clouds/cloud03.png"
+        alt=""
+      />
+      <img
+        class="top-cloud top-cloud-3"
+        src="images/clouds/cloud03.png"
+        alt=""
+      />
+      <section class="scycrapers">
+        <h1>Minimal Hero with Infinite Scroll Nav</h1>
+      </section>
+    </div>
+
+    <!-- ══ SWIPER CUBE — 2 slides ══ -->
+    <div class="swiper mySwiper" id="mainSwiper">
+      <div class="swiper-wrapper">
+        <!-- Slide 1 — Hero -->
+        <div
+          class="swiper-slide slide-hero"
+          style="background-image: url(./images/streets/str01.jpg)"
+        >
+          <div class="hero-content">
+            <h1>
+              I craft&nbsp;the&nbsp;web,<br />one&nbsp;frame&nbsp;at&nbsp;a&nbsp;time.
+            </h1>
+            <p>
+              Alex Mora &mdash; Frontend Engineer obsessed with buttery
+              animations, pixel-perfect UIs, and code that makes other devs
+              jealous.
+            </p>
+            <a href="mailto:alex@example.com" class="btn"
+              >Let's work together</a
+            >
+          </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div
+          class="swiper-slide slide-content"
+          style="background-image: url(./images/streets/cream.jpg)"
+        >
+          <div class="content-inner">
+            <div class="image-block">
+              <img
+                src="./images/streets/pexels-luiz-silva-2152028761-32756086.jpg"
+                alt="Selected work"
+              />
+            </div>
+            <div class="text-block">
+              <h2>Built for the<br />real world.</h2>
+              <p>
+                Award-winning projects for startups and global brands alike.
+                React, Next.js, Three.js &mdash; whatever it takes to ship
+                something that actually performs at scale.
+              </p>
+              <p>
+                Clean architecture under the hood, jaw-dropping visuals on the
+                surface. No compromises.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scroll-hint" id="scrollHint">Scroll to explore ↓</div>
+
+    <!-- ══ PAGE SECTIONS ══ -->
+    <div id="page-sections">
+      <!-- Section — Skills -->
+      <section class="page-section section-features">
+        <h2>What I bring to the table</h2>
+        <p class="lead">
+          A full arsenal of modern frontend craft &mdash; from architecture to
+          the last keyframe.
+        </p>
+        <div class="cards">
+          <div class="card">
+            <div class="card-icon">✦</div>
+            <h3>Animation &amp; Motion</h3>
+            <p>
+              GSAP, Framer Motion, CSS keyframes, Lottie, and custom WebGL
+              shaders. If it moves on screen, I've built it.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">⬡</div>
+            <h3>3D &amp; WebGL</h3>
+            <p>
+              Three.js, React Three Fiber, and GLSL shaders. Interactive 3D
+              experiences that run silky-smooth in the browser.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">◈</div>
+            <h3>React &amp; Next.js</h3>
+            <p>
+              Production-grade apps with server components, streaming SSR, and
+              bulletproof state management.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">◻</div>
+            <h3>UI Architecture</h3>
+            <p>
+              Design systems, component libraries, and accessibility-first
+              patterns that scale across teams.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">◬</div>
+            <h3>Performance</h3>
+            <p>
+              Core Web Vitals obsessive. Every build is optimised, every asset
+              lazy-loaded, every render budgeted.
+            </p>
+          </div>
+          <div class="card">
+            <div class="card-icon">◎</div>
+            <h3>Creative Coding</h3>
+            <p>
+              Canvas API, SVG manipulation, generative art, and experimental
+              interfaces that push what the browser can do.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section — Contact -->
+      <section class="page-section section-cta">
+        <h2>Got a vision?<br />Let's make it real.</h2>
+        <p>
+          Available for freelance projects, full-time roles, and collaborations
+          that push the limits of what a browser can do.
+        </p>
+        <div>
+          <a href="mailto:alex@example.com" class="btn">Say hello</a>
+          <a
+            href="https://github.com/"
+            target="_blank"
+            rel="noopener"
+            class="btn-outline"
+            >See my work</a
+          >
+        </div>
+      </section>
+    </div>
+
+    <script>
+      const track = document.getElementById("navTrack");
+
+      /* ── Build 3-copy infinite loop ──────────────────────── */
+      const origList = track.querySelector(".nav-list");
+      const cloneL = origList.cloneNode(true);
+      const cloneR = origList.cloneNode(true);
+      track.insertBefore(cloneL, origList);
+      track.appendChild(cloneR);
+
+      let singleWidth = 0;
+      let ready = false;
+
+      /* ── Init: measure + center active item ──────────────── */
+      window.addEventListener("load", () => {
+        singleWidth = origList.getBoundingClientRect().width;
+
+        // Center the active link (in the middle copy)
+        const active = origList.querySelector("a.active");
+        const anchor = active
+          ? active.closest("li")
+          : origList.querySelector("li");
+        const aRect = anchor.getBoundingClientRect();
+        const tRect = track.getBoundingClientRect();
+        const itemCenter =
+          aRect.left - tRect.left + track.scrollLeft + aRect.width / 2;
+        track.scrollLeft = itemCenter - track.offsetWidth / 2;
+
+        highlightCenter();
+        requestAnimationFrame(() => {
+          ready = true;
+        });
+      });
+
+      /* ── Center-item spotlight ───────────────────────────── */
+      function highlightCenter() {
+        const trackCenter =
+          track.getBoundingClientRect().left + track.offsetWidth / 2;
+        const links = track.querySelectorAll("a");
+        let closest = null,
+          minDist = Infinity;
+        links.forEach((a) => {
+          const r = a.getBoundingClientRect();
+          const dist = Math.abs(r.left + r.width / 2 - trackCenter);
+          if (dist < minDist) {
+            minDist = dist;
+            closest = a;
+          }
+        });
+        links.forEach((a) => a.classList.toggle("center-item", a === closest));
+      }
+
+      /* ── Seamless loop on scroll ──────────────────────────── */
+      // When the user approaches either edge, silently jump by one list-width.
+      // Because all 3 copies are identical, the viewport content is unchanged.
+      track.addEventListener(
+        "scroll",
+        () => {
+          if (!ready) return;
+          const maxScroll = track.scrollWidth - track.offsetWidth;
+          if (track.scrollLeft < 80) {
+            track.scrollLeft += singleWidth;
+          } else if (track.scrollLeft > maxScroll - 80) {
+            track.scrollLeft -= singleWidth;
+          }
+          highlightCenter();
+        },
+        { passive: true },
+      );
+
+      /* ── Mouse drag scrolling ────────────────────────────── */
+      let dragging = false,
+        startX = 0,
+        startScroll = 0;
+
+      track.addEventListener("mousedown", (e) => {
+        dragging = true;
+        startX = e.pageX - track.offsetLeft;
+        startScroll = track.scrollLeft;
+        track.classList.add("dragging");
+        e.preventDefault();
+      });
+
+      document.addEventListener("mouseup", () => {
+        dragging = false;
+        track.classList.remove("dragging");
+      });
+
+      /* ── Click: scroll clicked item to center ───────────── */
+      let didDrag = false;
+      track.addEventListener(
+        "mousedown",
+        () => {
+          didDrag = false;
+        },
+        { capture: true },
+      );
+      document.addEventListener("mousemove", () => {
+        if (dragging) didDrag = true;
+      });
+
+      track.addEventListener("click", (e) => {
+        const a = e.target.closest("a");
+        if (!a) return;
+        e.preventDefault();
+        if (didDrag) return; // was a drag, not a real click
+
+        const aRect = a.getBoundingClientRect();
+        const tRect = track.getBoundingClientRect();
+        const itemCenter =
+          aRect.left - tRect.left + track.scrollLeft + aRect.width / 2;
+        const target = itemCenter - track.offsetWidth / 2;
+        track.scrollTo({ left: target, behavior: "smooth" });
+      });
+
+      document.addEventListener("mousemove", (e) => {
+        if (!dragging) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        const walk = (x - startX) * 1.6;
+        track.scrollLeft = startScroll - walk;
+      });
+      /* ── Lenis smooth scroll + GSAP ───────────────────── */
+      const lenis = new Lenis({
+        duration: 1.4,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true,
+      });
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // Wire Lenis into GSAP ticker so ScrollTrigger reads Lenis scroll position
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => lenis.raf(time * 1000));
+      gsap.ticker.lagSmoothing(0);
+
+      /* ── Scycrapers: scrubbed zoom-out tied to scroll progress ─ */
+      const scycrapers = document.querySelector(".scycrapers");
+      gsap.fromTo(
+        scycrapers,
+        { scale: 1, opacity: 0, transformOrigin: "center center" },
+        {
+          scale: 1.12,
+          opacity: 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: scycrapers,
+            start: "top bottom", // animation starts as section enters viewport
+            end: "top 20%", // fully zoomed out when section top is 20% from top
+            scrub: 1.2, // lag in seconds — smooth, not instant
+          },
+        },
+      );
+      /* ── Scycrapers zoom-out entrance ────────────────────── */
+      /* (replaced by GSAP ScrollTrigger above) */
+
+      /* ── Cloud ambient float (GSAP) ─────────────────────────
+         Ambient clouds (bg-cloud-1, bg-cloud-2): free XY drift.
+         Transition clouds (bg-cloud-3/4/5, top-cloud-1/2/3): Y only —
+         their X is driven by the ScrollTrigger below.
+      ─────────────────────────────────────────────────────── */
+      (function () {
+        function makeCloudFloat(selector, opts) {
+          var el = document.querySelector(selector);
+          if (!el) return;
+          var maxX = opts.maxX || 0;
+          var maxY = opts.maxY !== undefined ? opts.maxY : 12;
+          var minDur = opts.minDur || 22;
+          var maxDur = opts.maxDur || 46;
+          var delay = opts.delay || 0;
+
+          function step() {
+            var props = { y: gsap.utils.random(-maxY, maxY) };
+            if (maxX > 0) props.x = gsap.utils.random(-maxX, maxX);
+            gsap.to(
+              el,
+              Object.assign(props, {
+                duration: gsap.utils.random(minDur, maxDur),
+                ease: "sine.inOut",
+                onComplete: step,
+              }),
+            );
+          }
+          gsap.delayedCall(delay, step);
+        }
+
+        /* Ambient — free XY float */
+        makeCloudFloat(".bg-cloud-1", {
+          maxX: 32,
+          maxY: 12,
+          minDur: 22,
+          maxDur: 40,
+          delay: 0,
+        });
+        makeCloudFloat(".bg-cloud-2", {
+          maxX: 26,
+          maxY: 10,
+          minDur: 18,
+          maxDur: 36,
+          delay: 3.5,
+        });
+
+        /* Transition — Y-only float (X handled by ScrollTrigger) */
+        makeCloudFloat(".bg-cloud-3", {
+          maxY: 8,
+          minDur: 28,
+          maxDur: 52,
+          delay: 1.2,
+        });
+        makeCloudFloat(".bg-cloud-4", {
+          maxY: 10,
+          minDur: 24,
+          maxDur: 44,
+          delay: 5.5,
+        });
+        makeCloudFloat(".bg-cloud-5", {
+          maxY: 8,
+          minDur: 20,
+          maxDur: 38,
+          delay: 2.8,
+        });
+        makeCloudFloat(".top-cloud-1", {
+          maxY: 10,
+          minDur: 26,
+          maxDur: 48,
+          delay: 0.8,
+        });
+        makeCloudFloat(".top-cloud-2", {
+          maxY: 8,
+          minDur: 22,
+          maxDur: 42,
+          delay: 4.2,
+        });
+        makeCloudFloat(".top-cloud-3", {
+          maxY: 12,
+          minDur: 30,
+          maxDur: 55,
+          delay: 7.0,
+        });
+
+        /* ── Scroll-driven horizontal drift for transition clouds ──
+           Fires as .scycrapers-wrapper enters the viewport and
+           scrubs clouds left / right in alternating directions.
+        ────────────────────────────────────────────────────────── */
+        var tCloudTrigger = {
+          trigger: ".scycrapers-wrapper",
+          start: "top 95%",
+          end: "top 5%",
+          scrub: 2,
+        };
+
+        gsap.fromTo(
+          ".bg-cloud-3",
+          { x: 0 },
+          { x: -100, ease: "none", scrollTrigger: tCloudTrigger },
+        );
+        gsap.fromTo(
+          ".bg-cloud-4",
+          { x: 0 },
+          { x: 80, ease: "none", scrollTrigger: tCloudTrigger },
+        );
+        gsap.fromTo(
+          ".bg-cloud-5",
+          { x: 0 },
+          { x: -60, ease: "none", scrollTrigger: tCloudTrigger },
+        );
+        gsap.fromTo(
+          ".top-cloud-1",
+          { x: 0 },
+          { x: 110, ease: "none", scrollTrigger: tCloudTrigger },
+        );
+        gsap.fromTo(
+          ".top-cloud-2",
+          { x: 0 },
+          { x: -85, ease: "none", scrollTrigger: tCloudTrigger },
+        );
+        gsap.fromTo(
+          ".top-cloud-3",
+          { x: 0 },
+          { x: 70, ease: "none", scrollTrigger: tCloudTrigger },
+        );
+      })();
+    </script>
+
+    <script>
+      /* ── Bird flock generator ─────────────────────────────── */
+      (function () {
+        var flock = document.getElementById("bird-flock");
+        var birdSVG =
+          '<svg width="100%" height="100%" viewBox="0 0 300 300" aria-hidden="true">' +
+          '<path d="M150 130 C 130 130, 120 160, 150 200 C 180 160, 170 130, 150 130" fill="#111"/>' +
+          '<circle cx="150" cy="130" r="15" fill="#111"/>' +
+          '<path class="left-wing" d="M150 140 C 100 140, 50 100, 30 120 C 70 150, 100 160, 150 140" fill="#111"/>' +
+          '<path class="right-wing" d="M150 140 C 200 140, 250 100, 270 120 C 230 150, 200 160, 150 140" fill="#111"/>' +
+          "</svg>";
+
+        var easings = [
+          "ease-in-out",
+          "cubic-bezier(0.45,0.05,0.55,0.95)",
+          "cubic-bezier(0.37,0,0.63,1)",
+          "cubic-bezier(0.4,0.1,0.6,0.9)",
+          "cubic-bezier(0.5,0,0.5,1)",
+        ];
+
+        var N = 17;
+        for (var i = 0; i < N; i++) {
+          var dur = (14 + Math.random() * 6).toFixed(1);
+          var delay = -(Math.random() * 26).toFixed(1);
+          var size = Math.round(24 + Math.random() * 15);
+          var bx = Math.round(-300 + Math.random() * 600);
+          var by = Math.round(-300 + Math.random() * 600);
+          var bflap = (0.32 + Math.random() * 0.38).toFixed(2);
+          var easing = easings[Math.floor(Math.random() * easings.length)];
+
+          var div = document.createElement("div");
+          div.className = "bird";
+          div.style.cssText =
+            "--bdur:" +
+            dur +
+            "s;" +
+            "--bdelay:" +
+            delay +
+            "s;" +
+            "--bsize:" +
+            size +
+            "px;" +
+            "--bx:" +
+            bx +
+            "px;" +
+            "--by:" +
+            by +
+            "px;" +
+            "--bflap:" +
+            bflap +
+            "s;" +
+            "--beasing:" +
+            easing +
+            ";";
+          div.innerHTML = birdSVG;
+          flock.appendChild(div);
+        }
+      })();
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+    <script>
+      var scrollHint = document.getElementById("scrollHint");
+
+      var swiper = new Swiper(".mySwiper", {
+        direction: "vertical",
+        effect: "cube",
+        allowTouchMove: false,
+        mousewheel: false,
+        speed: 700,
+        cubeEffect: {
+          shadow: true,
+          slideShadows: true,
+          shadowOffset: 20,
+          shadowScale: 0.94,
+        },
+        on: {
+          slideChange: function () {
+            if (this.activeIndex > 0) {
+              scrollHint.classList.add("hidden");
+            } else {
+              scrollHint.classList.remove("hidden");
+            }
+          },
+        },
+      });
+
+      // Pin the swiper for 200vh of extra scroll (= 2 snap points: 0, 100vh)
+      ScrollTrigger.create({
+        trigger: "#mainSwiper",
+        start: "top top",
+        end: "+=200vh",
+        pin: true,
+        snap: {
+          snapTo: function (value) {
+            return value < 0.5 ? 0 : 1;
+          },
+          duration: { min: 0.3, max: 0.6 },
+          delay: 0.05,
+          ease: "power2.inOut",
+        },
+        onUpdate: function (self) {
+          var idx = self.progress > 0.5 ? 1 : 0;
+          if (idx !== swiper.activeIndex) {
+            swiper.slideTo(idx);
+          }
+        },
+      });
+    </script>
+  </body>
+</html>

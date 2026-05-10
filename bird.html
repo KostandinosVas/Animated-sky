@@ -1,0 +1,52 @@
+<svg width="300" height="300" viewBox="0 0 300 300">
+  <style>
+    .left-wing {
+      animation: flap-left 0.5s infinite alternate ease-in-out;
+      transform-origin: 150px 140px;
+    }
+    .right-wing {
+      animation: flap-right 0.5s infinite alternate ease-in-out;
+      transform-origin: 150px 140px;
+    }
+
+    @keyframes flap-left {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(-40deg);
+      }
+    }
+    @keyframes flap-right {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(40deg);
+      }
+    }
+  </style>
+
+  <!-- Body -->
+  <path
+    d="M150 130 C 130 130, 120 160, 150 200 C 180 160, 170 130, 150 130"
+    fill="black"
+  />
+
+  <!-- Head -->
+  <circle cx="150" cy="130" r="15" fill="black" />
+
+  <!-- Left Wing -->
+  <path
+    class="left-wing"
+    d="M150 140 C 100 140, 50 100, 30 120 C 70 150, 100 160, 150 140"
+    fill="black"
+  />
+
+  <!-- Right Wing -->
+  <path
+    class="right-wing"
+    d="M150 140 C 200 140, 250 100, 270 120 C 230 150, 200 160, 150 140"
+    fill="black"
+  />
+</svg>
