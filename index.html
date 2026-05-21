@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Minimal Hero</title>
+    <title>Alex Mora — Frontend Engineer</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;700&display=swap"
@@ -132,8 +132,13 @@
         width: var(--bsize, 75px);
         height: var(--bsize, 75px);
         opacity: 0;
-        animation: bird-fly var(--bdur, 16s) linear var(--bdelay, 0s) infinite;
-        animation-timing-function: var(--beasing, ease-in-out);
+        animation: bird-fly var(--bdur, 16s) var(--beasing, ease-in-out)
+          var(--bdelay, 0s) 1 forwards;
+        animation-play-state: paused;
+      }
+
+      #bird-flock.flock-active .bird {
+        animation-play-state: running;
       }
 
       .bird svg {
@@ -145,7 +150,7 @@
         0% {
           transform: translate(
             calc(-15vw + var(--bx, 0px)),
-            calc(93vh + var(--by, 0px))
+            calc(140vh + var(--by, 0px))
           );
           opacity: 0;
         }
@@ -155,7 +160,7 @@
         50% {
           transform: translate(
             calc(47vw + var(--bx, 0px)),
-            calc(37vh + var(--by, 0px))
+            calc(55vh + var(--by, 0px))
           );
         }
         94% {
@@ -360,6 +365,15 @@
         flex-direction: column;
         text-align: center;
         position: relative;
+      }
+
+      .slide-bg-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
       }
 
       .slide-hero::after {
@@ -591,17 +605,17 @@
         <div class="nav-track" id="navTrack">
           <ul class="nav-list">
             <li><a href="#" class="active">Home</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Works</a></li>
-            <li><a href="#">History</a></li>
             <li><a href="#">About</a></li>
-            <li><a href="#">Services</a></li>
+            <li><a href="#">Work</a></li>
+            <li><a href="#">Stack</a></li>
+            <li><a href="#">Process</a></li>
+            <li><a href="#">Lab</a></li>
             <li><a href="#">Blog</a></li>
-            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Open Source</a></li>
             <li><a href="#">Contact</a></li>
-            <li><a href="#">Team</a></li>
-            <li><a href="#">Journal</a></li>
-            <li><a href="#">Archive</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Work</a></li>
+            <li><a href="#">Stack</a></li>
           </ul>
         </div>
 
@@ -632,7 +646,7 @@
         alt=""
       />
       <section class="scycrapers">
-        <h1>Minimal Hero with Infinite Scroll Nav</h1>
+        <h1>Code that ships. Craft that shows.</h1>
       </section>
     </div>
 
@@ -640,10 +654,15 @@
     <div class="swiper mySwiper" id="mainSwiper">
       <div class="swiper-wrapper">
         <!-- Slide 1 — Hero -->
-        <div
-          class="swiper-slide slide-hero"
-          style="background-image: url(./images/streets/str01.jpg)"
-        >
+        <div class="swiper-slide slide-hero">
+          <video
+            class="slide-bg-video"
+            src="https://www.pexels.com/el-gr/download/video/32259638/"
+            autoplay
+            muted
+            loop
+            playsinline
+          ></video>
           <div class="hero-content">
             <h1>
               I craft&nbsp;the&nbsp;web,<br />one&nbsp;frame&nbsp;at&nbsp;a&nbsp;time.
@@ -662,7 +681,42 @@
         <!-- Slide 2 -->
         <div
           class="swiper-slide slide-content"
-          style="background-image: url(./images/streets/cream.jpg)"
+          style="
+            background-image: url(./images/tree02.webp);
+            background-size: cover;
+            background-position: center;
+          "
+        >
+          <div class="content-inner">
+            <div class="image-block">
+              <img
+                src="./images/streets/pexels-luiz-silva-2152028761-32756086.jpg"
+                alt="Selected work"
+              />
+            </div>
+            <div class="text-block">
+              <h2>Built for the<br />real world.</h2>
+              <p>
+                Award-winning projects for startups and global brands alike.
+                React, Next.js, Three.js &mdash; whatever it takes to ship
+                something that actually performs at scale.
+              </p>
+              <p>
+                Clean architecture under the hood, jaw-dropping visuals on the
+                surface. No compromises.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div
+          class="swiper-slide slide-content"
+          style="
+            background-image: url(./images/tree01.webp);
+            background-size: cover;
+            background-position: center;
+          "
         >
           <div class="content-inner">
             <div class="image-block">
@@ -1077,8 +1131,8 @@
 
         var N = 17;
         for (var i = 0; i < N; i++) {
-          var dur = (14 + Math.random() * 6).toFixed(1);
-          var delay = -(Math.random() * 26).toFixed(1);
+          var dur = (10 + Math.random() * 3).toFixed(1);
+          var delay = (Math.random() * 3.5).toFixed(1);
           var size = Math.round(24 + Math.random() * 15);
           var bx = Math.round(-300 + Math.random() * 600);
           var by = Math.round(-300 + Math.random() * 600);
@@ -1112,6 +1166,18 @@
           div.innerHTML = birdSVG;
           flock.appendChild(div);
         }
+
+        function activateFlock() {
+          flock.classList.add("flock-active");
+        }
+        window.addEventListener("wheel", activateFlock, {
+          once: true,
+          passive: true,
+        });
+        window.addEventListener("touchstart", activateFlock, {
+          once: true,
+          passive: true,
+        });
       })();
     </script>
 
@@ -1142,27 +1208,78 @@
         },
       });
 
-      // Pin the swiper for 200vh of extra scroll (= 2 snap points: 0, 100vh)
-      ScrollTrigger.create({
+      // ── Swiper: one-slide-at-a-time wheel control ──────────
+      var swiperActive = false;
+      var swiperLocked = false;
+      var swiperIdx = 0;
+      var TOTAL_SLIDES = 3;
+      var pinStart = 0;
+      var pinEnd = 0;
+
+      var st = ScrollTrigger.create({
         trigger: "#mainSwiper",
         start: "top top",
-        end: "+=200vh",
+        end: "+=300vh",
         pin: true,
-        snap: {
-          snapTo: function (value) {
-            return value < 0.5 ? 0 : 1;
-          },
-          duration: { min: 0.3, max: 0.6 },
-          delay: 0.05,
-          ease: "power2.inOut",
+        pinSpacing: true,
+        onEnter: function (self) {
+          pinStart = self.start;
+          pinEnd = self.end;
+          swiperIdx = 0;
+          swiperActive = true;
+          lenis.stop();
         },
-        onUpdate: function (self) {
-          var idx = self.progress > 0.5 ? 1 : 0;
-          if (idx !== swiper.activeIndex) {
-            swiper.slideTo(idx);
-          }
+        onLeave: function () {
+          swiperActive = false;
+          lenis.start();
+        },
+        onEnterBack: function (self) {
+          pinStart = self.start;
+          pinEnd = self.end;
+          swiperIdx = TOTAL_SLIDES - 1;
+          swiper.slideTo(swiperIdx, 0);
+          swiperActive = true;
+          lenis.stop();
+        },
+        onLeaveBack: function () {
+          swiperActive = false;
+          swiperIdx = 0;
+          swiper.slideTo(0, 0);
+          lenis.start();
         },
       });
+
+      window.addEventListener(
+        "wheel",
+        function (e) {
+          if (!swiperActive) return;
+          e.preventDefault();
+          if (swiperLocked) return;
+
+          var dir = e.deltaY > 0 ? 1 : -1;
+          var next = swiperIdx + dir;
+
+          if (next >= 0 && next < TOTAL_SLIDES) {
+            swiperLocked = true;
+            swiperIdx = next;
+            swiper.slideTo(next, 800);
+            setTimeout(function () {
+              swiperLocked = false;
+            }, 1000);
+          } else if (next >= TOTAL_SLIDES) {
+            // scroll past last slide → exit pin forward
+            swiperActive = false;
+            lenis.scrollTo(pinEnd + 10, { immediate: true });
+            lenis.start();
+          } else {
+            // scroll before first slide → exit pin backward
+            swiperActive = false;
+            lenis.scrollTo(pinStart - 10, { immediate: true });
+            lenis.start();
+          }
+        },
+        { passive: false },
+      );
     </script>
   </body>
 </html>
