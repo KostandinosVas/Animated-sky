@@ -330,10 +330,22 @@
         font-family: "Raleway", sans-serif;
         font-size: 2.5rem;
         color: #1a4560;
-        background-image: url("images/scycrapers/scycrap04.jpg");
-        background-size: cover;
-        background-position: center;
+        position: relative;
         will-change: transform, opacity;
+      }
+
+      .scycrapers-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: 0;
+      }
+
+      .scycrapers h1 {
+        position: relative;
+        z-index: 1;
       }
 
       /* ── Swiper cube section ────────────────────────────── */
@@ -624,7 +636,7 @@
           <img src="images/clouds/cloud03.png" alt="" />
         </div>
         <div class="cloud-mask cloud-mask-right">
-          <img src="images/clouds/cloud04.png" alt="" />
+          <img src="images/clouds/cloud02.png" alt="" />
         </div>
       </div>
     </section>
@@ -646,6 +658,14 @@
         alt=""
       />
       <section class="scycrapers">
+        <video
+          class="scycrapers-video"
+          src="images/video-80724_medium.mp4"
+          autoplay
+          muted
+          loop
+          playsinline
+        ></video>
         <h1>Code that ships. Craft that shows.</h1>
       </section>
     </div>
@@ -654,15 +674,14 @@
     <div class="swiper mySwiper" id="mainSwiper">
       <div class="swiper-wrapper">
         <!-- Slide 1 — Hero -->
-        <div class="swiper-slide slide-hero">
-          <video
-            class="slide-bg-video"
-            src="https://www.pexels.com/el-gr/download/video/32259638/"
-            autoplay
-            muted
-            loop
-            playsinline
-          ></video>
+        <div
+          class="swiper-slide slide-hero"
+          style="
+            background-image: url(./images/streets/im03.jpg);
+            background-size: cover;
+            background-position: center;
+          "
+        >
           <div class="hero-content">
             <h1>
               I craft&nbsp;the&nbsp;web,<br />one&nbsp;frame&nbsp;at&nbsp;a&nbsp;time.
@@ -689,10 +708,7 @@
         >
           <div class="content-inner">
             <div class="image-block">
-              <img
-                src="./images/streets/pexels-luiz-silva-2152028761-32756086.jpg"
-                alt="Selected work"
-              />
+              <img src="./images/streets/im03.jpg" alt="Selected work" />
             </div>
             <div class="text-block">
               <h2>Built for the<br />real world.</h2>
